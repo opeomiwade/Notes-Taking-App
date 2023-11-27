@@ -1,10 +1,10 @@
 import React from "react";
-import NoteIcon from '@mui/icons-material/Note';
-function Header() {
+// import NoteIcon from '@mui/icons-material/Note';
+function Header({title, ...props}) {
   return (
     <header>
      
-        <h1> <NoteIcon/> Notes</h1>
+        <h1>{title}</h1>
      
     </header>
   );

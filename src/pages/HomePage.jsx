@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-import Note from "./Note";
-import CreateArea from "./CreateArea";
+import Footer from "../components/Footer";
+import Note from "../components/Note";
+import CreateArea from "../components/CreateArea";
 import axios from "axios";
 
-function App() {
+function HomePage() {
   const [notes, setNotes] = useState([]);
 
   async function fetchNotes() {
@@ -22,7 +21,10 @@ function App() {
 
   async function addNote(newNote) {
     try {
-      const response = await axios.post("http://localhost:3001/addNote", newNote);
+      const response = await axios.post(
+        "http://localhost:3001/addNote",
+        newNote
+      );
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -33,15 +35,14 @@ function App() {
   }
 
   async function deleteNote(id) {
-    const notes = await axios.delete(`http://localhost:3001/deleteNote/${id}`)
+    const notes = await axios.delete(`http://localhost:3001/deleteNote/${id}`);
     setNotes(notes.data);
   }
 
   return (
     <div>
-      <Header />
       <CreateArea onAdd={addNote} />
-      {notes.map((noteItem, index) => {
+      {notes.map((noteItem) => {
         return (
           <Note
             key={noteItem._id}
@@ -57,4 +58,4 @@ function App() {
   );
 }
 
-export default App;
+export default HomePage;

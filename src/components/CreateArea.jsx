@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import { Zoom } from "@mui/material";
-import axios from "axios";
 
 function CreateArea(props) {
   const [note, setNote] = useState({
@@ -22,15 +21,9 @@ function CreateArea(props) {
     });
   }
 
-  async function submitNote(event) {
+  function submitNote(event) {
     props.onAdd(note);
-    console.log(note)
-    try {
-      const response = await axios.post("http://localhost:3001/addNote", note);
-      console.log(response.data)
-    } catch (error) {
-      console.log(error);
-    }
+    console.log(note);
     setNote({
       title: "",
       content: "",

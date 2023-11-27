@@ -25,16 +25,16 @@ app.get("/", (req, res) => {
   res.send("Server Running");
 });
 
-app.post("/addNote", async (req, res) => {
+app.post("/addNote", async (req, res) => { 
   let data = req.body;
   const note = new Note({ ...data });
+  console.log(note)
   await note.save().catch((error) => console.log(error));
   res.status(200).send("Note added sucessfully");
 });
 
 app.get("/allNotes", async (req, res) => {
   const notes = await Note.find();
-  console.log(notes);
   res.status(200).json(notes);
 });
 
@@ -44,7 +44,6 @@ app.delete("/deletenote/:id", async (req, res) => {
     console.log(error)
     );
     const notes = await Note.find()
-    console.log(notes)
     res.status(200).json(notes);
 });
 
