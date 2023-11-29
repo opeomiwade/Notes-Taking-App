@@ -126,7 +126,7 @@ form.create-note button {
   outline: none;
 }
 
-button{
+button.login{
   padding: 1rem 2rem;
   border-radius: 200px;
   background-color: #f5ba13;
@@ -135,6 +135,6 @@ button{
   border:0
 }
 
-button:hover{
+button.login:hover{
   cursor:pointer
 }

@@ -5,6 +5,7 @@ function Header({title, ...props}) {
     <header>
      
         <h1>{title}</h1>
+        <button onClick={() => localStorage.removeItem("authToken") }>Log Out</button>
      
     </header>
   );
