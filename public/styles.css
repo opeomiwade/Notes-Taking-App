@@ -25,21 +25,21 @@ header h1 {
   font-weight: 200;
 }
 
-label{
-  color: #f5ba13 ;
+label {
+  color: #f5ba13;
   font-size: 2rem;
   font-family: "McLaren", cursive;
   font-weight: 200;
 }
 
-input.auth{
+input.auth {
   border-radius: 1rem;
   width: 30%;
   padding: 0.5rem;
-  border:1px solid #f5ba13;
+  border: 1px solid #f5ba13;
 }
 
-.form{
+.form {
   display: flex;
   gap: 1.2rem;
   flex-direction: column;
@@ -126,15 +126,56 @@ form.create-note button {
   outline: none;
 }
 
-button.login{
+button.login {
   padding: 1rem 2rem;
   border-radius: 200px;
   background-color: #f5ba13;
-  color:#eee;
+  color: #eee;
   font-size: 1.5rem;
-  border:0
+  border: 0;
 }
 
-button.login:hover{
-  cursor:pointer
+.switch {
+  padding: 1rem 1rem;
+  border-radius: 200px;
+  width: 120px;
+  background-color: orange;
+  color: #eee;
+  font-size: 0.8rem;
+  border: 0;
+}
+
+button.login:hover {
+  cursor: pointer;
+}
+
+.switch:hover {
+  cursor: pointer;
+}
+
+button.logout {
+  padding: 0.5rem 1rem;
+  border-radius: 200px;
+  background-color: #f5ba13;
+  color: #eee;
+  font-family: "McLaren", cursive;
+  font-weight: bold;
+  font-size: 1rem;
+  border: 2px solid white;
+}
+
+button.logout:hover {
+  cursor: pointer;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.errorDiv {
+  color: red;
+  font-weight: bold;
+  font-family: "McLaren", cursive;
 }

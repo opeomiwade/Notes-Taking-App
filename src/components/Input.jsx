@@ -4,7 +4,7 @@ function Input({ labelName, ...props }) {
   return (
     <>
       <label htmlFor={labelName}>{labelName}</label>
-      <input {...props} />
+      <input {...props}  />
     </>
   );
 }

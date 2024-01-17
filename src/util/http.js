@@ -1,7 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import {json} from "react-router-dom"
 import axios from "axios"
-import { redirect } from "react-router-dom";
 
 
 export async function getNotes(){

@@ -1,5 +1,7 @@
 import React from "react";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
+import { motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 function Note(props) {
   function handleClick() {
@@ -7,11 +9,20 @@ function Note(props) {
   }
 
   return (
-    <div className="note">
+    <motion.div
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeIn" }}
+      exit={{ y: -50, opacity: 0 }}
+      className="note"
+    >
       <h1>{props.title}</h1>
       <p>{props.content}</p>
-      <button onClick={handleClick}> <DeleteIcon/> </button>
-    </div>
+      <button onClick={handleClick}>
+        {" "}
+        <DeleteIcon />{" "}
+      </button>
+    </motion.div>
   );
 }
 

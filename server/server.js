@@ -85,16 +85,15 @@ app.delete("/deletenote/:id", checkUser, async (req, res) => {
       res.status(401).json({ message: "Unauthorized" });
     }
   })(req, res);
-
 });
 
 app.post("/signup", (req, res) => {
   User.register(
     { username: req.body.username },
     req.body.password,
-    (err, user) => {
+    (err, user, info) => {
       if (err) {
-        console.log(err);
+        console.log(info)
         res.status(500).json({ err });
       } else {
         passport.authenticate("local")(req, res, () => {
@@ -104,13 +103,34 @@ app.post("/signup", (req, res) => {
             { expiresIn: "2h" }
           );
           res.status(200).json({
-            message: "User create and logged In succesfully",
+            message: "User created and logged In succesfully",
             authToken: token,
           });
         });
       }
     }
   );
+});
+
+app.post("/login", (req, res) => {
+  passport.authenticate("local", async (err, user, info) => {
+    if (user) {
+      const token = jwt.sign(
+        {
+          username: req.body.username,
+          password: req.body.password,
+        },
+        "secretkey12456754",
+        { expiresIn: "2h" }
+      );
+      console.log("Logged In")
+      res.status(200).json({ message: "User logged In", authToken: token });
+    } else {
+      console.log(info)
+      console.log(err)
+      res.status(404).json({info})
+    }
+  })(req, res);
 });
 
 app.listen(port, () => {

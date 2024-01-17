@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import { Zoom } from "@mui/material";
+import {motion} from "framer-motion"
 
 function CreateArea(props) {
   const [note, setNote] = useState({

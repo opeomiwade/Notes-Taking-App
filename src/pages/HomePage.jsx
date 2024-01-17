@@ -1,11 +1,12 @@
 import React from "react";
-import { useLoaderData,redirect } from "react-router";
+import { useLoaderData, redirect } from "react-router";
 import Footer from "../components/Footer";
 import Note from "../components/Note";
 import CreateArea from "../components/CreateArea";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import queryClient, { getNotes, addNote } from "../util/http";
 import axios from "axios";
+import { AnimatePresence } from "framer-motion";
 
 function HomePage() {
   const notesData = useLoaderData();
@@ -40,17 +41,20 @@ function HomePage() {
   return (
     <div>
       <CreateArea onAdd={addNoteHandler} />
-      {data.map((noteItem) => {
-        return (
-          <Note
-            key={noteItem._id}
-            id={noteItem._id}
-            title={noteItem.title}
-            content={noteItem.content}
-            onDelete={deleteNote}
-          />
-        );
-      })}
+      <AnimatePresence mode="sync">
+        {data.map((noteItem) => {
+          return (
+            <Note
+              key={noteItem._id}
+              id={noteItem._id}
+              title={noteItem.title}
+              content={noteItem.content}
+              onDelete={deleteNote}
+            />
+          );
+        })}
+      </AnimatePresence>
+
       <Footer />
     </div>
   );
