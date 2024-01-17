@@ -5,6 +5,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import passportLocalMongoose from "passport-local-mongoose";
 import passport from "passport";
+import "dotenv/config"
 
 const app = express();
 const port = 3001;
@@ -22,7 +23,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 await mongoose
-  .connect("mongodb://localhost:27017/notesDB")
+  .connect(`mongodb+srv://ope_admin:${process.env.ATLAS_KEY}@cluster0.72hfjc0.mongodb.net/userDB`)
   .catch((error) => console.log(error));
 
 const noteSchema = new mongoose.Schema({
