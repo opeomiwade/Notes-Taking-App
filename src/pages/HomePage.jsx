@@ -1,5 +1,5 @@
 import React from "react";
-import { useLoaderData, redirect } from "react-router";
+import { redirect } from "react-router";
 import Footer from "../components/Footer";
 import Note from "../components/Note";
 import CreateArea from "../components/CreateArea";
@@ -9,15 +9,11 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 
 function HomePage() {
-  const notesData = useLoaderData();
-  console.log(notesData);
-
   const { data } = useQuery({
     queryKey: ["notes"],
     queryFn: getNotes,
     staleTime: 5000,
   });
-  console.log(data);
 
   const { mutate } = useMutation({
     mutationFn: addNote,
@@ -60,10 +56,16 @@ function HomePage() {
   );
 }
 
-export async function loader() {
+export async function loader({ request }) {
+  const googleSignInJWT = new URL(request.url).searchParams.get("token");
+  if (googleSignInJWT != undefined) {
+    localStorage.setItem("authToken", googleSignInJWT);
+  }
+
   if (!localStorage.getItem("authToken")) {
     return redirect("/");
   }
+
   return queryClient.fetchQuery({
     queryKey: ["notes"],
     queryFn: getNotes,

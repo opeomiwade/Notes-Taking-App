@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   Form,
   useParams,
@@ -6,15 +6,21 @@ import {
   redirect,
   useActionData,
   useNavigate,
+  useNavigation,
 } from "react-router-dom";
 import Input from "./Input";
 import axios from "axios";
 import { motion } from "framer-motion";
+import GoogleIcon from "@mui/icons-material/Google";
 
 function AuthForm() {
   const { auth } = useParams();
   const error = useActionData();
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const [isDisabled, setIsDisabled] = useState(true);
 
   function handleClick() {
     if (auth == "login") {
@@ -22,6 +28,16 @@ function AuthForm() {
     } else {
       navigate("/login");
     }
+  }
+
+  async function googleLoginHandler(){
+    window.location.href = 'http://localhost:3001/auth/login/google'
+  }
+
+  function blurHandler() {
+    setIsDisabled(
+      !emailRef.current.value.trim() || !passwordRef.current.value.trim()
+    );
   }
 
   return (
@@ -32,14 +48,17 @@ function AuthForm() {
         name="username"
         type="email"
         required
+        onBlur={blurHandler}
+        ref={emailRef}
       />
-
       <Input
         labelName="Password"
         className="auth"
         name="password"
         required
         type="password"
+        onBlur={blurHandler}
+        ref={passwordRef}
       />
       {error && error.isError && (
         <motion.div
@@ -52,12 +71,21 @@ function AuthForm() {
         </motion.div>
       )}
       <motion.button
-        whileHover={{ scale: 1.2, backgroundColor: "yellowgreen" }}
-        transition={{ type: "spring", stiffness: 200 }}
-        className="login"
+        whileHover={
+          isDisabled ? {} : { scale: 1.2, backgroundColor: "yellowgreen" }
+        }
+        transition={isDisabled ? {} : { type: "spring", stiffness: 200 }}
+        disabled={isDisabled}
+        className={isDisabled ? "disabled" : "login"}
       >
-        {auth.charAt(0).toUpperCase() + auth.slice(1)}
+        {navigation.state == "submitting"
+          ? "Loading...."
+          : auth.charAt(0).toUpperCase() + auth.slice(1)}
       </motion.button>
+      <a className="google-button" onClick={googleLoginHandler}>
+        <GoogleIcon />
+        Sign In With Google
+      </a>
       <motion.button
         whileHover={{ scale: 1.1, backgroundColor: "orangered" }}
         transition={{ type: "spring", stiffness: 200 }}

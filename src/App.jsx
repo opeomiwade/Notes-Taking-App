@@ -7,7 +7,7 @@ import HomePage from "./pages/HomePage";
 import Auth from "./pages/Auth";
 import Root from "./components/Root";
 import { loader as notesLoader } from "./pages/HomePage";
-import { loader as checkAuth } from "./util/http";
+import {loader as authLoader} from "./pages/Auth"
 import { action as loginAction } from "./components/AuthForm";
 import queryClient from "./util/http";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -22,9 +22,10 @@ function App() {
         {
           path: ":auth",
           element: <Auth />,
+          loader:authLoader,
           action: loginAction,
         },
-        { path: "notes", element: <HomePage />, loader: notesLoader },
+        { path: "notes", element: <HomePage />,loader: notesLoader },
       ],
     },
     ,

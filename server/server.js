@@ -5,7 +5,10 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import passportLocalMongoose from "passport-local-mongoose";
 import passport from "passport";
-import "dotenv/config"
+import GoogleStrategy from "passport-google-oidc";
+import findOrCreate from "mongoose-findorcreate";
+import session from "express-session";
+import "dotenv/config";
 
 const app = express();
 const port = 3001;
@@ -14,16 +17,30 @@ function checkUser(req, res, next) {
   const token = req.headers["authorization"].split(" ")[1];
   const userCredentials = jwt.verify(token, "secretkey12456754");
   req.body.username = userCredentials.username;
-  req.body.password = userCredentials.password;
+  req.body.password =
+    userCredentials.password !== undefined
+      ? userCredentials.password
+      : "defaultPassword";
   next();
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(
+  session({
+    secret: process.env.SECRET, // Replace with a strong, randomly generated secret
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 await mongoose
-  .connect(`mongodb+srv://ope_admin:${process.env.ATLAS_KEY}@cluster0.72hfjc0.mongodb.net/userDB`)
+  .connect(
+    `mongodb+srv://ope_admin:${process.env.ATLAS_KEY}@cluster0.72hfjc0.mongodb.net/userDB`
+  )
   .catch((error) => console.log(error));
 
 const noteSchema = new mongoose.Schema({
@@ -44,25 +61,64 @@ const usersSchema = new mongoose.Schema({
 });
 
 usersSchema.plugin(passportLocalMongoose);
+usersSchema.plugin(findOrCreate);
 const Note = mongoose.model("note", noteSchema);
 const User = mongoose.model("user", usersSchema);
 
 passport.use(User.createStrategy());
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: "http://localhost:3001/oauth2/redirect",
+    },
+    function (issuer, profile, cb) {
+      User.findOrCreate({ username: profile.id }, function (err, user) {
+        return cb(err, user);
+      });
+    }
+  )
+);
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, {
+      id: user.id,
+      username: user.username,
+      picture: user.picture,
+    });
+  });
+});
+
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, user);
+  });
+});
 
 app.get("/", (req, res) => {
   res.send("Server Running");
 });
 
 app.post("/addNote", checkUser, async (req, res) => {
+  if (req.body.password === "google") {
+    let data = req.body;
+    const note = new Note({ ...data.note });
+    await User.findOneAndUpdate(
+      { username: req.body.username },
+      { $push: { notes: note } }
+    );
+    res.status(200).send("Note added sucessfully");
+    return;
+  }
+
   passport.authenticate("local", async (err, user, info) => {
     if (user) {
-      console.log(user);
       let data = req.body;
       const note = new Note({ ...data.note });
-      await User.findByIdAndUpdate(user._id, { $push: { notes: note } });
+      await User.findbyIdAndUpdate(user._id, { $push: { notes: note } });
       res.status(200).send("Note added sucessfully");
     } else {
-      console.log(info);
       res.status(401).json({ message: "Unauthorized" });
     }
   })(req, res);
@@ -76,6 +132,16 @@ app.get("/allNotes", checkUser, async (req, res) => {
 
 app.delete("/deletenote/:id", checkUser, async (req, res) => {
   let noteId = req.params.id;
+  if (req.body.password === "google") {
+    await User.findOneAndUpdate(
+      { username: req.body.username },
+      {
+        $pull: { notes: { _id: noteId } },
+      }
+    ).catch((error) => console.log(error));
+    res.status(200).send("Note deleted sucessfully");
+  }
+
   passport.authenticate("local", async (err, user, info) => {
     if (user) {
       await User.findByIdAndUpdate(user._id, {
@@ -94,7 +160,6 @@ app.post("/signup", (req, res) => {
     req.body.password,
     (err, user, info) => {
       if (err) {
-        console.log(info)
         res.status(500).json({ err });
       } else {
         passport.authenticate("local")(req, res, () => {
@@ -124,15 +189,32 @@ app.post("/login", (req, res) => {
         "secretkey12456754",
         { expiresIn: "2h" }
       );
-      console.log("Logged In")
       res.status(200).json({ message: "User logged In", authToken: token });
     } else {
-      console.log(info)
-      console.log(err)
-      res.status(404).json({info})
+      res.status(404).json({ info });
     }
   })(req, res);
 });
+
+app.get("/auth/login/google", (req, res) => {
+  passport.authenticate("google", { scope: ["profile"] })(req, res);
+});
+
+app.get(
+  "/oauth2/redirect",
+  passport.authenticate("google", {
+    failureRedirect: "/login",
+    failureMessage: true,
+  }),
+  function (req, res) {
+    const token = jwt.sign(
+      { username: req.user.username, password: "google" },
+      "secretkey12456754",
+      { expiresIn: "2h" }
+    );
+    res.redirect(`http://localhost:3000/notes?token=${token}`);
+  }
+);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

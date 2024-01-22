@@ -61,6 +61,8 @@ footer p {
   color: #ccc;
 }
 .note {
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 7px;
   box-shadow: 0 2px 5px #ccc;
@@ -68,21 +70,34 @@ footer p {
   width: 240px;
   margin: 16px;
   float: left;
+  overflow: auto;
+  max-height: 200px;
 }
 .note h1 {
   font-size: 1.1em;
   margin-bottom: 6px;
+  font-weight: 900;
 }
 .note p {
-  font-size: 1.1em;
+  font-size: 1em;
   margin-bottom: 10px;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
+.disabled{
+  padding: 1rem 2rem;
+  border-radius: 200px;
+  background-color: lightgray;
+  color: #eee;
+  font-size: 1.5rem;
+  border: 0;
+
+}
+
 .note button {
   position: relative;
-  float: right;
+  left: 190px;
   margin-right: 10px;
   color: #f5ba13;
   border: none;
@@ -179,3 +194,27 @@ header {
   font-weight: bold;
   font-family: "McLaren", cursive;
 }
+
+
+.google-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  background-color: #4285F4; /* Google Blue */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.google-button:hover {
+  background-color: #357ae8; /* Slightly darker blue on hover */
+}
+
+.button-text {
+  font-size: 14px;
+  font-weight: bold;
+}
+

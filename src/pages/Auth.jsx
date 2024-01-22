@@ -5,4 +5,9 @@ function AuthPage() {
   return <AuthForm />;
 }
 
+export function loader(){
+  localStorage.removeItem("authToken")
+  return null
+}
+
 export default AuthPage;
