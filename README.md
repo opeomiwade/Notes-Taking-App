@@ -25,9 +25,6 @@ This project is a Notetaking Web App built with React.js, Passport.js, Node.js, 
 
 ## Installation
 
-1. Clone the repository:
-
-```bash
 git clone https://github.com/yourusername/notetaking-web-app.git
 
 OR
