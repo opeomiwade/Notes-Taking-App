@@ -4,9 +4,11 @@ This project is a Notetaking Web App built with React.js, Passport.js, Node.js, 
 
 ## Features
 
+
 - User Authentication: Utilized Passport.js for secure user authentication.
+- Note Taking- Allows users to create, save and delete notes.
 - Backend Functionality: Created backend functionalities using Node.js and Express.js for route handling.
-- Database Management: Employed Mongoose.js and MongoDB Atlas for efficient database management.
+- Database Management: Employed Mongoose.js and MongoDB Atlas for efficient management of the respective notes of users.
 - Frontend Interface: Designed the frontend interface with React.js, utilizing React Context for state management.
 - Page Navigation: Employed React Router for seamless page navigation.
 - Styling: Utilized CSS for visually appealing styling.
