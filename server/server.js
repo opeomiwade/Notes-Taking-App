@@ -5,7 +5,6 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import passportLocalMongoose from "passport-local-mongoose";
 import passport from "passport";
-import GoogleStrategy from "passport-google-oidc";
 import findOrCreate from "mongoose-findorcreate";
 import session from "express-session";
 import "dotenv/config";
@@ -66,20 +65,6 @@ const Note = mongoose.model("note", noteSchema);
 const User = mongoose.model("user", usersSchema);
 
 passport.use(User.createStrategy());
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/oauth2/redirect",
-    },
-    function (issuer, profile, cb) {
-      User.findOrCreate({ username: profile.id }, function (err, user) {
-        return cb(err, user);
-      });
-    }
-  )
-);
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
     return cb(null, {
