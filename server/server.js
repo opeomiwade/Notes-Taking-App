@@ -106,16 +106,6 @@ app.get("/allNotes", checkUser, async (req, res) => {
 
 app.delete("/deletenote/:id", checkUser, async (req, res) => {
   let noteId = req.params.id;
-  if (req.body.password === "google") {
-    await User.findOneAndUpdate(
-      { username: req.body.username },
-      {
-        $pull: { notes: { _id: noteId } },
-      }
-    ).catch((error) => console.log(error));
-    res.status(200).send("Note deleted sucessfully");
-  }
-
   passport.authenticate("local", async (err, user, info) => {
     if (user) {
       await User.findByIdAndUpdate(user._id, {
