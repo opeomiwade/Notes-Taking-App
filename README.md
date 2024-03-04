@@ -26,11 +26,4 @@ This project is a Notetaking Web App built with React.js, Passport.js, Node.js, 
 - MongoDB Atlas: A fully-managed cloud database service.
 
 ## Installation
-
-- clone repo
-- cd to server folder, start server with node server
-- cd to project folder and start react dev server with npm start
-
-OR
-
-access deployed application at https://note-taking-app-b7zr.onrender.com
+Access deployed application at https://note-taking-app-b7zr.onrender.com
