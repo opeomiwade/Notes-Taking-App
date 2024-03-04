@@ -86,17 +86,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/addNote", checkUser, async (req, res) => {
-  if (req.body.password === "google") {
-    let data = req.body;
-    const note = new Note({ ...data.note });
-    await User.findOneAndUpdate(
-      { username: req.body.username },
-      { $push: { notes: note } }
-    );
-    res.status(200).send("Note added sucessfully");
-    return;
-  }
-
   passport.authenticate("local", async (err, user, info) => {
     if (user) {
       let data = req.body;
