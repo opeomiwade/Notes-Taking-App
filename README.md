@@ -29,7 +29,7 @@ This project is a Notetaking Web App built with React.js, Passport.js, Node.js, 
 
 - clone repo
 - cd to server folder, start server with node server
-- cd to project folder and start react dev server with npm run dev
+- cd to project folder and start react dev server with npm start
 
 OR
 
