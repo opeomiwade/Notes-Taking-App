@@ -116,7 +116,7 @@ app.post("/addNote", checkUser, async (req, res) => {
     if (user) {
       let data = req.body;
       const note = new Note({ ...data.note });
-      await User.findbyIdAndUpdate(user._id, { $push: { notes: note } });
+      await User.findOneAndUpdate(user._id, { $push: { notes: note } });
       res.status(200).send("Note added sucessfully");
     } else {
       res.status(401).json({ message: "Unauthorized" });
