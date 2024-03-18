@@ -27,4 +27,4 @@ This project is a Notetaking Web App built with React.js, Passport.js, Node.js, 
 
 ## Installation
 - Access deployed application at https://note-taking-app-b7zr.onrender.com
-- or clone repo as requests might be slow duet to app being deployed on render free tier.
+- or clone repo .
